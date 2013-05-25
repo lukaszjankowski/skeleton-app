@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+
+<!-- Application deployment tasks -->
+<project name="deploy" default="help" basedir=".">
+
+    <target name="help">
+        <echo>Existing tasks:</echo>
+        <echo> qa - run all QA tasks</echo>
+        <echo> php-lint - check php syntax</echo>
+        <echo> php-tests - run PHP unit tests</echo>
+        <echo> php-cs - run PHP_Codesniffer code analysis</echo>
+        <echo> php-pmd - Run PHP PMD code analysis</echo>
+    </target>
+
+    <!-- Declare available targets -->
+
+    <target name="qa" description="Run all QA tasks">
+        <phingcall target="php-lint" />
+        <phingcall target="php-tests" />
+        <phingcall target="php-pmd" />
+        <phingcall target="php-cs" />
+    </target>
+
+<!-- =============================================================================================================== -->
+
+    <target name="php-lint" description="Check php syntax">
+        <phplint level="verbose" haltonfailure="true" cachefile=".php-lint-cachefile">
+            <fileset dir="${project.basedir}">
+                <include name="src/**/*.php" />
+                <include name="test/**/*.php" />
+            </fileset>
+        </phplint>
+    </target>
+
+<!-- =============================================================================================================== -->
+
+    <target name="php-tests" description="Run unit tests">
+        <phpunit configuration="${project.basedir}/phpunit.xml" printsummary="true" haltonfailure="true" >
+            <batchtest>
+                <fileset dir="test/php/">
+                    <include name="**/*Test*.php"/>
+                </fileset>
+            </batchtest>
+        </phpunit>
+    </target>
+
+<!-- =============================================================================================================== -->
+
+    <target name="php-pmd" description="Run PHP PMD code analysis">
+        <phpmd rulesets="codesize,controversial,design,naming,unusedcode">
+            <fileset dir="${project.basedir}/src/" />
+            <fileset dir="${project.basedir}/test/" />
+        </phpmd>
+    </target>
+
+<!-- =============================================================================================================== -->
+
+    <target name="php-cs" description="Run PHP_Codesniffer code analysis">
+        <phpcodesniffer standard="PSR2" allowedFileExtensions="php" verbosity="1">
+            <!-- more specific localizations speeds up filtering -->
+            <fileset dir="${project.basedir}/src/">
+                <include name="**/*.php" />
+            </fileset>
+            <fileset dir="${project.basedir}/test/">
+                <include name="**/*.php" />
+            </fileset>
+        </phpcodesniffer>
+    </target>
+
+</project>
