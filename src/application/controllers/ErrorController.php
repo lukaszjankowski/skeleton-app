@@ -46,11 +46,17 @@ class ErrorController extends Zend_Controller_Action
         $this->view->request = $errors->request;
     }
 
+    /**
+     * @throws Zend_Controller_Action_Exception
+     */
     public function error500Action()
     {
         throw new Zend_Controller_Action_Exception('Internal server error');
     }
 
+    /**
+     * @throws Zend_Controller_Action_Exception
+     */
     public function error404Action()
     {
         throw new Zend_Controller_Action_Exception('Page not found', 404);

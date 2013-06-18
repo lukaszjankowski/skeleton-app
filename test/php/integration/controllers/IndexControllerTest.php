@@ -1,4 +1,9 @@
 <?php
+/**
+ * Integration test for IndexController
+ *
+ * @author Łukasz Jankowski <mail@lukaszjankowski.info>
+ */
 class IndexControllerTest extends ControllerTestCase
 {
     public function testDispatchIndexAction()
